@@ -9,7 +9,7 @@
     "README.md"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest && exit 0",
     "clean": "npx rimraf dist",
     "dev": "npx tsc -w",
     "build": "npm run clean && npx tsc"
