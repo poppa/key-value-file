@@ -12,7 +12,9 @@
     "test": "jest && exit 0",
     "clean": "npx rimraf dist",
     "dev": "npx tsc -w",
-    "build": "npm run clean && npx tsc"
+    "build": "npm run clean && npx tsc",
+    "bump": "npm version path -m 'Bumping version to %s'",
+    "publish": "npm run build && npm run test && npm publish"
   },
   "repository": {
     "type": "git",
