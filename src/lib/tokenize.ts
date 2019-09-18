@@ -7,7 +7,7 @@ export function tokenize(data: string | Buffer) {
   }
 
   const tokens: Token[] = []
-  let len = data.length
+  const len = data.length
   let i = 1
   let state: TokenType = TokenType.None
   let buffer = ''
@@ -32,7 +32,6 @@ export function tokenize(data: string | Buffer) {
   while (i <= len) {
     const code = data.charCodeAt(i)
     const char = data.charAt(i)
-    // console.log('-->', char, code)
 
     if (isnl(code)) {
       pushBuffer()
@@ -81,7 +80,7 @@ export function tokenize(data: string | Buffer) {
 }
 
 function isnl(char: number) {
-  return [10].includes(char)
+  return [10, 13].includes(char)
 }
 
 function isws(char: number) {
@@ -89,5 +88,5 @@ function isws(char: number) {
 }
 
 function isdelim(char: number) {
-  return [61].includes(char)
+  return char === 61
 }

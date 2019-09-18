@@ -5,6 +5,7 @@ import { tokenize } from '../lib/tokenize'
 describe('Test KeyValue class', () => {
   test('Expect KeyValue.get() to work', () => {
     const data =
+      // tslint:disable-next-line: prefer-template
       'key1 = value1\n' +
       'key2 = value 2\n'
 
@@ -20,6 +21,7 @@ describe('Test KeyValue class', () => {
 
   test('Expect KeyValue.set() to work', () => {
     const data =
+      // tslint:disable-next-line: prefer-template
       'key1 = value1\n' +
       'key2 = value 2\n'
 
@@ -41,6 +43,7 @@ describe('Test KeyValue class', () => {
 
   test('Expect KeyValue.rename() to work', () => {
     const data =
+      // tslint:disable-next-line: prefer-template
       'key1 = value1\n' +
       'key2 = value 2\n'
 
@@ -54,11 +57,45 @@ describe('Test KeyValue class', () => {
 
   test('Expect KeyValue.toString() to give the same output as input', () => {
     const data =
+      // tslint:disable-next-line: prefer-template
       'key1 = value1\n' +
       ' # A comment\n' +
       'key2 = value 2 # Trailing comment\n'
 
     const kv = new KeyValue(tokenize(data))
     expect(kv.toString()).toEqual(data)
+  })
+
+  test('Expect KeyValue.delete() to work', () => {
+    const data =
+      // tslint:disable-next-line: prefer-template
+      'key1 = value1\n' +
+      'key2 = value 2\n' +
+      'key3 = value3'
+
+    const kv = new KeyValue(tokenize(data))
+
+    kv.delete('key2')
+
+    const val2 = kv.get('key2')
+    const val3 = kv.get('key3')
+
+    expect(val2).toBe(undefined)
+    expect(val3).toEqual('value3')
+  })
+
+  test('Expect empty KeyValue from scratch to work', () => {
+    const kv = new KeyValue()
+
+    kv
+      .set('key1', 'value1')
+      .set('key2', 2)
+
+    const expected =
+      // tslint:disable-next-line: prefer-template
+      'key1=value1\n' +
+      'key2=2'
+
+    expect(kv.toString()).toEqual(expected)
   })
 })

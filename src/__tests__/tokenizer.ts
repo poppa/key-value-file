@@ -3,7 +3,7 @@ import { tokenize } from '../lib/tokenize'
 import { TokenType } from '../lib/token'
 
 describe('Test tokenizer', () => {
-  test('Expect tokenize to handle keys preceeded by whitespace', () => {
+  test('Expect tokenize() to handle keys preceeded by whitespace', () => {
     const data = ' \tkey=value'
     const tokens = tokenize(data)
     expect(tokens.length).toBe(5)
@@ -11,7 +11,7 @@ describe('Test tokenizer', () => {
   })
 
   test(
-    'Expect tokenize to handle keys preceeded by whitespace after newline',
+    'Expect tokenize() to handle keys preceeded by whitespace after newline',
     () => {
       const data = '\n \tkey=value'
       const tokens = tokenize(data)

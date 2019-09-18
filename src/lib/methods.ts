@@ -1,16 +1,14 @@
-import { PathLike } from "fs";
-import { readFile } from './fs';
-import { tokenize } from './tokenize';
-import { KeyValue } from './keyvalue';
-import { KeyValueFile } from './keyvaluefile';
+import { PathLike } from "fs"
+import { readFile } from './fs'
+import { tokenize } from './tokenize'
+import { KeyValue } from './keyvalue'
+import { KeyValueFile } from './keyvaluefile'
 
 export async function parseFile(path: PathLike) {
   const data = await readFile(path)
-  const tokens = tokenize(data)
-  return new KeyValueFile(path, tokens)
+  return new KeyValueFile(path, tokenize(data))
 }
 
 export function parseString(data: string | Buffer) {
-  const tokens = tokenize(data)
-  return new KeyValue(tokens)
+  return new KeyValue(tokenize(data))
 }
