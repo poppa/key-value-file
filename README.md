@@ -22,7 +22,7 @@ async function myFunc() {
   const kv = await parseFile('my-environment.env')
 
   kv
-    .rename('key1', 'keyOne)
+    .rename('key1', 'keyOne')
     .set('key2', 4)
     .delete('key3')
     .set('key4', 'new value')
