@@ -20,7 +20,19 @@
     "type": "git",
     "url": "git+https://github.com/poppa/key-value-file.git"
   },
-  "author": "Pontus Östlund",
+  "keywords": [
+    "keyvalue",
+    "keyvalue-file",
+    "parser",
+    "env",
+    ".env",
+    "environment",
+    "environment-file"
+  ],
+  "author": {
+    "name": "Pontus Östlund",
+    "email": "poppanator@gmail.com"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/poppa/key-value-file/issues"
