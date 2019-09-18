@@ -13,7 +13,7 @@
     "clean": "npx rimraf dist",
     "dev": "npx tsc -w",
     "build": "npm run clean && npx tsc",
-    "bump": "npm version path -m 'Bumping version to %s'",
+    "bump": "npm version patch -m 'Bumping version to %s'",
     "publish": "npm run build && npm run test && npm publish"
   },
   "repository": {
