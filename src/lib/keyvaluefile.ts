@@ -17,6 +17,7 @@ export class KeyValueFile extends KeyValue {
 
   public async writeFile(collapseWhitespace = false) {
     const data = this.toString(collapseWhitespace)
-    return writeFile(this._path, data)
+    await writeFile(this._path, data)
+    return this
   }
 }
