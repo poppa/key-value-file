@@ -1,6 +1,6 @@
 {
   "name": "key-value-file",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A simple key/value file parser/writer",
   "main": "dist/key-value-file.js",
   "files": [
