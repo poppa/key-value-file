@@ -45,15 +45,25 @@ describe('Test tokenizer', () => {
     () => {
       const data = 'key \t=   value\n'
       const tokens = tokenize(data)
+
       expect(tokens.length).toBe(9)
-      expect(tokens[1].value).toEqual(' ')
-      expect(tokens[2].value).toEqual('\t')
-      expect(tokens[4].value).toEqual(' ')
-      expect(tokens[5].value).toEqual(' ')
-      expect(tokens[6].value).toEqual(' ')
+      expect(tokens[1].value).toBe(' ')
+      expect(tokens[2].value).toBe('\t')
+      expect(tokens[4].value).toBe(' ')
+      expect(tokens[5].value).toBe(' ')
+      expect(tokens[6].value).toBe(' ')
       expect(tokens[7].type).toBe(TokenType.Value)
       expect(tokens[7].value).toEqual('value')
       expect(tokens[8].type).toBe(TokenType.Newline)
+    }
+  )
+
+  test(
+    'Expect whitespace between value and comment to be whitespace token',
+    () => {
+      const data = 'key=value # ending comment'
+      const tokens = tokenize(data)
+      expect(tokens[3].type).toBe(TokenType.Whitespace)
     }
   )
 })
