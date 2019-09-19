@@ -69,8 +69,8 @@ key4=new value
 
 # TODO
 
-  * __Handle missing/empty values__
-    Things will probably break right now if something like `key= ` occurs.
+  * ~~__Handle missing/empty values__~~ _(fixed)_
+    ~~Things will probably break right now if something like `key= ` occurs.~~
 
   * __Documentation__
     Oh, how we like that.
