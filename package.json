@@ -49,6 +49,7 @@
     "typescript-tslint-plugin": "^0.5.4"
   },
   "dependencies": {
+    "string-walker": "^1.0.0",
     "tslib": "^1.10.0"
   }
 }

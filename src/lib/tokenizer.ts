@@ -1,4 +1,4 @@
-import { StringWalker } from './stringwalker'
+import { StringWalker } from 'string-walker'
 import { Token, TokenType } from './token'
 
 export class Tokenizer extends StringWalker {
