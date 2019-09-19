@@ -14,7 +14,7 @@
     "dev": "npx tsc -w",
     "build": "npm run clean && npx tsc",
     "bump": "npm version patch -m 'Bumping version to %s'",
-    "publish": "npm run build && npm run test && npm publish"
+    "pub": "npm run build && npm run test && npm publish"
   },
   "repository": {
     "type": "git",
