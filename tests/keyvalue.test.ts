@@ -1,6 +1,6 @@
 import 'jest'
-import { KeyValue } from '../lib/keyvalue'
-import { tokenize } from '../lib/tokenize'
+import { KeyValue } from '../src/lib/keyvalue'
+import { tokenize } from '../src/lib/tokenize'
 
 describe('Test KeyValue class', () => {
   test('Expect KeyValue.get() to work', () => {

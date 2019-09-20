@@ -1,7 +1,7 @@
 import 'jest'
 import { join } from 'path'
-import { parseFile } from '../lib/methods'
-import { KeyValueFile } from '../lib/keyvaluefile'
+import { parseFile } from '../src/lib/methods'
+import { KeyValueFile } from '../src/lib/keyvaluefile'
 
 describe('Test parseFile() method', () => {
   test('Expect parseFile() to load existing file', async () => {

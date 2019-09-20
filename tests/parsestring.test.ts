@@ -1,5 +1,5 @@
 import 'jest'
-import { parseString } from '../lib/methods'
+import { parseString } from '../src/lib/methods'
 
 describe('Test parseString()', () => {
   test('Expect parseString() to work with plain string', () => {

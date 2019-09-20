@@ -1,8 +1,8 @@
 import 'jest'
-import { KeyValueFile } from '../lib/keyvaluefile'
-import { parseFile } from '../lib/methods'
+import { KeyValueFile } from '../src/lib/keyvaluefile'
+import { parseFile } from '../src/lib/methods'
 import { join } from 'path'
-import { readFile } from '../lib/fs'
+import { readFile } from '../src/lib/fs'
 import { tmpdir } from 'os'
 import { unlinkSync, readFileSync } from 'fs'
 

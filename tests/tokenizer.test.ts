@@ -1,6 +1,6 @@
 import 'jest'
-import { tokenize } from '../lib/tokenize'
-import { TokenType } from '../lib/token'
+import { tokenize } from '../src/lib/tokenize'
+import { TokenType } from '../src/lib/token'
 
 describe('Test tokenizer', () => {
   test('Expect tokenize() to handle keys preceeded by whitespace', () => {
