@@ -26,6 +26,8 @@
     "parser",
     "env",
     ".env",
+    "dotenv",
+    "dotenv-parser",
     "environment",
     "environment-file"
   ],
