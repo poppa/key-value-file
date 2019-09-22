@@ -141,7 +141,18 @@ export class KeyValue {
    * Remove all unnecessary whitespace tokens
    */
   protected collapseWhitespace() {
-    return this._tokens.filter((t) => {
+    const len = this._tokens.length - 1
+
+    return this._tokens.filter((t, i) => {
+      if ((this._tokens[i - 1]
+        && this._tokens[i - 1].type === TokenType.Newline
+        && t.type === TokenType.Newline)
+        || (i === len
+        && t.type === TokenType.Newline)
+      ) {
+        return false
+      }
+
       return t.type === TokenType.Newline || t.type !== TokenType.Whitespace
     })
   }
