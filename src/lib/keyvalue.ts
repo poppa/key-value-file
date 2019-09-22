@@ -118,8 +118,24 @@ export class KeyValue {
    * Remove all comment tokens
    */
   public removeComments() {
-    const newTokens = this._tokens.filter((t) => t.type !== TokenType.Comment)
+    const tokens = this._tokens
+    const newTokens: Token[] = []
+
+    // tslint:disable-next-line: prefer-for-of
+    for (let i = 0; i < tokens.length; i++) {
+      if (tokens[i].type === TokenType.Comment) {
+        if (!this.isTrailingComment(i)) {
+          i += 1
+        }
+
+        continue
+      }
+
+      newTokens.push(tokens[i])
+    }
+
     this._tokens = newTokens
+
     return this
   }
 
@@ -134,6 +150,33 @@ export class KeyValue {
       : this._tokens
 
     return tokens.map((t) => t.value).join('')
+  }
+
+  protected isTrailingComment(pos: number) {
+    const tokens = this._tokens
+    const c = tokens[pos]
+    if (c.type !== TokenType.Comment) {
+      throw new Error(`Expected a comment node, got ${c.type}`)
+    }
+
+    let i = pos - 1
+
+    while (tokens[i]) {
+      const t = tokens[i]
+      i -= 1
+
+      if (t.type === TokenType.Whitespace) {
+        continue
+      }
+      else if (t.type === TokenType.Value) {
+        return true
+      }
+      else if (t.type === TokenType.Newline) {
+        return false
+      }
+    }
+
+    return false
   }
 
   /**
@@ -178,7 +221,7 @@ export class KeyValue {
         && this._tokens[i - 1].type === TokenType.Newline
         && t.type === TokenType.Newline)
         || (i === len
-        && t.type === TokenType.Newline)
+          && t.type === TokenType.Newline)
       ) {
         return false
       }
