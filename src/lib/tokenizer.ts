@@ -63,7 +63,14 @@ export class Tokenizer extends StringWalker {
       return
     }
 
-    const endpos = this.findNextOf([' ', '\t', '='])
+    let endpos: number = NaN
+
+    if (this.isQuoteChar()) {
+      endpos = this.findStringEnd()
+    }
+    else {
+      endpos = this.findNextOf([' ', '\t', '='])
+    }
 
     if (isNaN(endpos)) {
       throw new Error('Syntax error')
