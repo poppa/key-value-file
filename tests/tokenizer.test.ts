@@ -66,4 +66,11 @@ describe('Test tokenizer', () => {
       expect(tokens[3].type).toBe(TokenType.Whitespace)
     }
   )
+
+  test('Expect quoted keys to work', () => {
+    const data = '"key 1"=value1'
+    const tokens = tokenize(data)
+    expect(tokens[0].type).toBe(TokenType.Key)
+    expect(tokens[0].value).toEqual('"key 1"')
+  })
 })
