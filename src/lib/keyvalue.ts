@@ -94,6 +94,36 @@ export class KeyValue {
   }
 
   /**
+   * Add new newline token
+   */
+  public addNewline() {
+    this._tokens.push({ type: TokenType.Newline, value: '\n' })
+    return this
+  }
+
+  /**
+   * Add a comment node.
+   *
+   * Note! The comment should not have a leading `#`.
+   * The comment can be multi-line
+   * @param comment
+   */
+  public addComment(comment: string) {
+    comment = comment.split('\n').map((s) => `# ${s}`).join('\n')
+    this._tokens.push({ type: TokenType.Comment, value: comment })
+    return this
+  }
+
+  /**
+   * Remove all comment tokens
+   */
+  public removeComments() {
+    const newTokens = this._tokens.filter((t) => t.type !== TokenType.Comment)
+    this._tokens = newTokens
+    return this
+  }
+
+  /**
    * Stringify the tokens
    * @param collapseWhitespace If `true` all whitespaces, except newlines,
    * will be removed
