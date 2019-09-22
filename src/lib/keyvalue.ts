@@ -1,19 +1,37 @@
 import { Token, TokenType } from './token'
 
+/**
+ * Class for manipulating key/value data (`.env` files f.ex)
+ */
 export class KeyValue {
   private _tokens: Token[] = []
 
+  /**
+   * Constructor
+   * @param tokens {@see tokenize:tokenize|tokenize()}
+   */
   constructor(tokens?: Token[]) {
     if (tokens) {
       this._tokens = tokens
     }
   }
 
+  /**
+   * Returns the value of key `key`
+   * @param key The key to get the value for
+   * @returns `undefined` if the `key` is not found
+   */
   public get(key: string) {
     const t = this.getValueForKey(key)
     return t && t.value
   }
 
+  /**
+   * Set the value of key `key`. If the `key` doesn't exist it's created
+   * @param key
+   * @param value
+   * @returns The instance being called
+   */
   public set(key: string, value: string | number) {
     const t = this.getValueForKey(key)
 
@@ -33,6 +51,12 @@ export class KeyValue {
     return this
   }
 
+  /**
+   * Rename the key `key` to `newName`
+   * @param key The name of the key to rename
+   * @param newName The new name of the key
+   * @returns The instance being called
+   */
   public rename(key: string, newName: string) {
     const t = this.getKey(key)
 
@@ -43,6 +67,11 @@ export class KeyValue {
     return this
   }
 
+  /**
+   * Delete the key `key`
+   * @param key The name of the key to delete
+   * @returns The instance being called
+   */
   public delete(key: string) {
     const k = this.getKeyIndex(key)
 
@@ -64,6 +93,11 @@ export class KeyValue {
     return this
   }
 
+  /**
+   * Stringify the tokens
+   * @param collapseWhitespace If `true` all whitespaces, except newlines,
+   * will be removed
+   */
   public toString(collapseWhitespace = false) {
     const tokens = collapseWhitespace
       ? this.collapseWhitespace()
@@ -72,6 +106,9 @@ export class KeyValue {
     return tokens.map((t) => t.value).join('')
   }
 
+  /**
+   * Check if we need no add a newline before adding a new key/value pair
+   */
   protected addNewlineBeforeNewValue() {
     if (!this._tokens.length) {
       return false
@@ -81,23 +118,38 @@ export class KeyValue {
     return last.type !== TokenType.Newline
   }
 
+  /**
+   * Get the key token with name `key`
+   * @param key
+   */
   protected getKey(key: string) {
     return this._tokens.find(
       (t) => t.type === TokenType.Key && t.value === key)
   }
 
+  /**
+   * Returns the index of the key token with name `key`
+   * @param key
+   */
   protected getKeyIndex(key: string) {
     return this._tokens.findIndex((val) => {
       return val.type === TokenType.Key && val.value === key
     })
   }
 
+  /**
+   * Remove all unnecessary whitespace tokens
+   */
   protected collapseWhitespace() {
     return this._tokens.filter((t) => {
       return t.type === TokenType.Newline || t.type !== TokenType.Whitespace
     })
   }
 
+  /**
+   * Returns the value token for key `key`
+   * @param key
+   */
   protected getValueForKey(key: string) {
     const keyPos = this.getKeyIndex(key)
     const tokens = this._tokens
