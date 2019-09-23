@@ -1,6 +1,8 @@
 import 'jest'
 import { tokenize } from '../src/lib/tokenize'
 import { TokenType } from '../src/lib/token'
+import { parseString } from '../src/lib/methods'
+import { KeyValue } from '../src/lib/keyvalue'
 
 describe('Test tokenizer', () => {
   test('Expect tokenize() to handle keys preceeded by whitespace', () => {
@@ -72,5 +74,59 @@ describe('Test tokenizer', () => {
     const tokens = tokenize(data)
     expect(tokens[0].type).toBe(TokenType.Key)
     expect(tokens[0].value).toEqual('"key 1"')
+  })
+
+  test('Expect whitespaces to be collapsed', () => {
+    const data =
+      // tslint:disable-next-line: prefer-template
+      '  # Comment\n' +
+      'key1 = value 1\n' +
+      '  key2  \t  =      \tvalue 2\n\n' +
+      'key3 =value   3\n'
+
+    const f = parseString(data)
+    const out = f.toString(true)
+    const expected =
+      // tslint:disable-next-line: prefer-template
+      '# Comment\n' +
+      'key1=value 1\n' +
+      'key2=value 2\n' +
+      'key3=value   3'
+
+    expect(out).toEqual(expected)
+  })
+
+  test('Expect comments to be removed', () => {
+    const data =
+      // tslint:disable-next-line: prefer-template
+      '# Comment\n' +
+      'key1=1 # Dude\n' +
+      '  # Comment\n' +
+      'key2=2\n' +
+      '# Comment'
+
+    const f = parseString(data)
+    f.removeComments()
+
+    expect(f.toString()).toEqual('key1=1 \nkey2=2\n')
+  })
+
+  test('Expect data to be created', () => {
+    const keyval = new KeyValue()
+    keyval
+      .set('key1', 1)
+      .addComment('Below is key 2')
+      .set('key2', 2)
+      .addNewline()
+      .addComment('Newline before this comment')
+
+    const expected =
+      // tslint:disable-next-line: prefer-template
+      'key1=1\n' +
+      '# Below is key 2\n' +
+      'key2=2\n\n' +
+      '# Newline before this comment'
+
+    expect(keyval.toString()).toEqual(expected)
   })
 })

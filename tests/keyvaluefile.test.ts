@@ -20,8 +20,13 @@ describe('Test KeyValueFile class', () => {
     kv = await parseFile(fn)
   })
 
-  afterAll(() => {
-    unlinkSync(gettmpfile())
+  afterEach(() => {
+    try {
+      unlinkSync(gettmpfile())
+    }
+    catch (e) {
+      //
+    }
   })
 
   test('Expect KeyValueFile.get() to work', () => {
@@ -106,5 +111,25 @@ describe('Test KeyValueFile class', () => {
     const data = readFileSync(gettmpfile()).toString()
 
     expect(data).toEqual(expected)
+  })
+
+  test(
+    'Expect KeyValueFile.create() to work with non-existing file',
+    async () => {
+      const path = gettmpfile()
+      const kwf = await KeyValueFile.create(path)
+      expect(kwf.path).toEqual(path)
+      expect(kwf.toString()).toEqual('')
+      kwf.set('key1', 1)
+      await kwf.writeFile()
+      const data = readFileSync(path).toString()
+      expect(data).toEqual('key1=1')
+    }
+  )
+
+  test('Expect KeyValueFile.create() to work with existing file', async () => {
+    const path = join(__dirname, 'test1.env')
+    const kwf = await KeyValueFile.create(path)
+    expect(kwf.get('key1')).toEqual('12')
   })
 })
