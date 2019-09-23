@@ -120,11 +120,26 @@ export class KeyValue {
   public removeComments() {
     const tokens = this._tokens
     const newTokens: Token[] = []
+    const rmLeadingWs = () => {
+      const i = newTokens.length - 2
+
+      if (newTokens[i] && newTokens[i].type === TokenType.Whitespace) {
+        while (newTokens[i]) {
+          if (newTokens[i].type === TokenType.Whitespace) {
+            newTokens.splice(i, 1)
+          }
+        }
+      }
+    }
 
     // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < tokens.length; i++) {
       if (tokens[i].type === TokenType.Comment) {
         if (!this.isTrailingComment(i)) {
+          if (tokens[i - 1] && tokens[i - 1].type === TokenType.Whitespace) {
+            rmLeadingWs()
+          }
+
           i += 1
         }
 
@@ -152,6 +167,10 @@ export class KeyValue {
     return tokens.map((t) => t.value).join('')
   }
 
+  /**
+   * Check if the comment at `pos` is a trailing comment or not
+   * @param pos
+   */
   protected isTrailingComment(pos: number) {
     const tokens = this._tokens
     const c = tokens[pos]
