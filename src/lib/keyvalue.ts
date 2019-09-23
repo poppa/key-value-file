@@ -39,10 +39,7 @@ export class KeyValue {
       t.value = `${value}`
     }
     else {
-      if (this.addNewlineBeforeNewValue()) {
-        this._tokens.push({ type: TokenType.Newline, value: '\n' })
-      }
-
+      this.addNewlineBeforeNewValue()
       this._tokens.push({ type: TokenType.Key, value: key })
       this._tokens.push({ type: TokenType.Delimiter, value: '=' })
       this._tokens.push({ type: TokenType.Value, value: `${value}` })
@@ -97,8 +94,7 @@ export class KeyValue {
    * Add new newline token
    */
   public addNewline() {
-    this._tokens.push({ type: TokenType.Newline, value: '\n' })
-    return this
+    return this.pushNewlineToken()
   }
 
   /**
@@ -109,6 +105,10 @@ export class KeyValue {
    * @param comment
    */
   public addComment(comment: string) {
+    if (this._tokens.length) {
+      this.pushNewlineToken()
+    }
+
     comment = comment.split('\n').map((s) => `# ${s}`).join('\n')
     this._tokens.push({ type: TokenType.Comment, value: comment })
     return this
@@ -203,11 +203,21 @@ export class KeyValue {
    */
   protected addNewlineBeforeNewValue() {
     if (!this._tokens.length) {
-      return false
+      return
     }
 
     const last = this._tokens[this._tokens.length - 1]
-    return last.type !== TokenType.Newline
+    if (last.type !== TokenType.Newline) {
+      this.pushNewlineToken()
+    }
+  }
+
+  /**
+   * Push a newline token
+   */
+  protected pushNewlineToken() {
+    this._tokens.push({ type: TokenType.Newline, value: '\n' })
+    return this
   }
 
   /**
