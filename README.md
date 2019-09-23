@@ -7,6 +7,8 @@ The main purpose is to be able to alter `.env` files programmatically
 
 # Usage
 
+## Manipulate an existing file
+
 ```ts
 /* my-environment.env
 
@@ -37,6 +39,36 @@ keyOne = value1
 key2 = 4
 
 key4=new value
+```
+
+## Create a new file programmatically
+
+`KeyValueFile.create('file.ext')` loads the file if it exists. Otherwise the
+file will be created when `KeyValueFile.writeFile()` is called.
+
+```ts
+import { KeyValueFile } from 'key-value-file'
+const file = KeyValueFile.create('.env')
+
+file
+  .set('key1', 'Value 1')
+  .set('key2', 'Value 2')
+  .addNewline()
+  .addComment('Only used in test environment')
+  .set('test1', 1)
+  .set('test2', 2)
+  .writeFile()
+```
+
+This will create a file with the following content:
+
+```
+key1=Value 1
+key2=Value 2
+
+# Only used in test environment
+test1=1
+test2=2
 ```
 
 # Quick doc
