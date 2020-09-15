@@ -23,8 +23,7 @@ describe('Test KeyValueFile class', () => {
   afterEach(() => {
     try {
       unlinkSync(gettmpfile())
-    }
-    catch (e) {
+    } catch (e) {
       //
     }
   })
@@ -40,8 +39,7 @@ describe('Test KeyValueFile class', () => {
   })
 
   test('Expect KeyValueFile.set() to work', () => {
-    kv
-      .set('key2', 'new value 2')
+    kv.set('key2', 'new value 2')
       .set('key1', 'new value1')
       .set('key3', 'all new value')
 
@@ -61,12 +59,9 @@ describe('Test KeyValueFile class', () => {
     expect(kv.get('newKey2')).toEqual('value 2')
   })
 
-  test(
-    'Expect KeyValueFile.toString() to give the same output as input',
-    () => {
-      expect(kv.toString()).toEqual(rawData)
-    }
-  )
+  test('Expect KeyValueFile.toString() to give the same output as input', () => {
+    expect(kv.toString()).toEqual(rawData)
+  })
 
   test('Expect KeyValueFile.delete() to work', () => {
     kv.delete('key2')
@@ -81,14 +76,9 @@ describe('Test KeyValueFile class', () => {
   test('Expect empty KeyValueFile from scratch to work', () => {
     const kvf = new KeyValueFile(gettmpfile())
 
-    kvf
-      .set('key1', 'value1')
-      .set('key2', 2)
+    kvf.set('key1', 'value1').set('key2', 2)
 
-    const expected =
-      // tslint:disable-next-line: prefer-template
-      'key1=value1\n' +
-      'key2=2'
+    const expected = 'key1=value1\n' + 'key2=2'
 
     expect(kvf.toString()).toEqual(expected)
     expect(kvf.path).toEqual(gettmpfile())
@@ -97,14 +87,9 @@ describe('Test KeyValueFile class', () => {
   test('Expect KeyValueFile.writeFile() to work', async () => {
     const kvf = new KeyValueFile(gettmpfile())
 
-    kvf
-      .set('key1', 'value1')
-      .set('key2', 2)
+    kvf.set('key1', 'value1').set('key2', 2)
 
-    const expected =
-      // tslint:disable-next-line: prefer-template
-      'key1=value1\n' +
-      'key2=2'
+    const expected = 'key1=value1\n' + 'key2=2'
 
     await kvf.writeFile()
 
@@ -113,19 +98,16 @@ describe('Test KeyValueFile class', () => {
     expect(data).toEqual(expected)
   })
 
-  test(
-    'Expect KeyValueFile.create() to work with non-existing file',
-    async () => {
-      const path = gettmpfile()
-      const kwf = await KeyValueFile.create(path)
-      expect(kwf.path).toEqual(path)
-      expect(kwf.toString()).toEqual('')
-      kwf.set('key1', 1)
-      await kwf.writeFile()
-      const data = readFileSync(path).toString()
-      expect(data).toEqual('key1=1')
-    }
-  )
+  test('Expect KeyValueFile.create() to work with non-existing file', async () => {
+    const path = gettmpfile()
+    const kwf = await KeyValueFile.create(path)
+    expect(kwf.path).toEqual(path)
+    expect(kwf.toString()).toEqual('')
+    kwf.set('key1', 1)
+    await kwf.writeFile()
+    const data = readFileSync(path).toString()
+    expect(data).toEqual('key1=1')
+  })
 
   test('Expect KeyValueFile.create() to work with existing file', async () => {
     const path = join(__dirname, 'test1.env')

@@ -9,7 +9,7 @@ import { tokenize } from './tokenize'
  */
 export class KeyValueFile extends KeyValue {
   /** Returns the path of the key/value file */
-  public get path() {
+  public get path(): PathLike {
     return this._path
   }
 
@@ -17,7 +17,7 @@ export class KeyValueFile extends KeyValue {
    * Creates an instance of {@link KeyValueFile}. If `path` exists it is
    * loaded.
    */
-  public static async create(path: PathLike) {
+  public static async create(path: PathLike): Promise<KeyValueFile> {
     let tokens: Token[] | undefined
 
     if (await exists(path)) {
@@ -25,7 +25,7 @@ export class KeyValueFile extends KeyValue {
       tokens = tokenize(data)
     }
 
-    return new KeyValueFile(path, tokens)
+    return new this(path, tokens)
   }
 
   private _path: PathLike
@@ -51,7 +51,7 @@ export class KeyValueFile extends KeyValue {
   public async writeFile(
     collapseWhitespace = false,
     options?: WriteFileOptions
-  ) {
+  ): Promise<this> {
     const data = this.toString(collapseWhitespace)
     await writeFile(this._path, data, options)
     return this

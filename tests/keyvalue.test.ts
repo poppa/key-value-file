@@ -4,10 +4,7 @@ import { tokenize } from '../src/lib/tokenize'
 
 describe('Test KeyValue class', () => {
   test('Expect KeyValue.get() to work', () => {
-    const data =
-      // tslint:disable-next-line: prefer-template
-      'key1 = value1\n' +
-      'key2 = value 2\n'
+    const data = 'key1 = value1\n' + 'key2 = value 2\n'
 
     const kv = new KeyValue(tokenize(data))
     const v1 = kv.get('key1')
@@ -20,15 +17,11 @@ describe('Test KeyValue class', () => {
   })
 
   test('Expect KeyValue.set() to work', () => {
-    const data =
-      // tslint:disable-next-line: prefer-template
-      'key1 = value1\n' +
-      'key2 = value 2\n'
+    const data = 'key1 = value1\n' + 'key2 = value 2\n'
 
     const kv = new KeyValue(tokenize(data))
 
-    kv
-      .set('key2', 'new value 2')
+    kv.set('key2', 'new value 2')
       .set('key1', 'new value1')
       .set('key3', 'all new value')
 
@@ -42,10 +35,7 @@ describe('Test KeyValue class', () => {
   })
 
   test('Expect KeyValue.rename() to work', () => {
-    const data =
-      // tslint:disable-next-line: prefer-template
-      'key1 = value1\n' +
-      'key2 = value 2\n'
+    const data = 'key1 = value1\n' + 'key2 = value 2\n'
 
     const kv = new KeyValue(tokenize(data))
 
@@ -57,7 +47,6 @@ describe('Test KeyValue class', () => {
 
   test('Expect KeyValue.toString() to give the same output as input', () => {
     const data =
-      // tslint:disable-next-line: prefer-template
       'key1 = value1\n' +
       ' # A comment\n' +
       'key2 = value 2 # Trailing comment\n'
@@ -67,11 +56,7 @@ describe('Test KeyValue class', () => {
   })
 
   test('Expect KeyValue.delete() to work', () => {
-    const data =
-      // tslint:disable-next-line: prefer-template
-      'key1 = value1\n' +
-      'key2 = value 2\n' +
-      'key3 = value3'
+    const data = 'key1 = value1\n' + 'key2 = value 2\n' + 'key3 = value3'
 
     const kv = new KeyValue(tokenize(data))
 
@@ -87,14 +72,9 @@ describe('Test KeyValue class', () => {
   test('Expect empty KeyValue from scratch to work', () => {
     const kv = new KeyValue()
 
-    kv
-      .set('key1', 'value1')
-      .set('key2', 2)
+    kv.set('key1', 'value1').set('key2', 2)
 
-    const expected =
-      // tslint:disable-next-line: prefer-template
-      'key1=value1\n' +
-      'key2=2'
+    const expected = 'key1=value1\n' + 'key2=2'
 
     expect(kv.toString()).toEqual(expected)
   })

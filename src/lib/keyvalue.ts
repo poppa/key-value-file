@@ -1,4 +1,5 @@
 import { Token, TokenType } from './token'
+import { Maybe } from './types'
 
 /**
  * Class for manipulating key/value data (`.env` files f.ex)
@@ -21,7 +22,7 @@ export class KeyValue {
    * @param key The key to get the value for
    * @returns `undefined` if the `key` is not found
    */
-  public get(key: string) {
+  public get(key: string): Maybe<string> {
     const t = this.getValueForKey(key)
     return t && t.value
   }
@@ -32,13 +33,12 @@ export class KeyValue {
    * @param value
    * @returns The instance being called
    */
-  public set(key: string, value: string | number) {
+  public set(key: string, value: string | number): this {
     const t = this.getValueForKey(key)
 
     if (t) {
       t.value = `${value}`
-    }
-    else {
+    } else {
       this.addNewlineBeforeNewValue()
       this._tokens.push({ type: TokenType.Key, value: key })
       this._tokens.push({ type: TokenType.Delimiter, value: '=' })
@@ -54,7 +54,7 @@ export class KeyValue {
    * @param newName The new name of the key
    * @returns The instance being called
    */
-  public rename(key: string, newName: string) {
+  public rename(key: string, newName: string): this {
     const t = this.getKey(key)
 
     if (t) {
@@ -69,7 +69,7 @@ export class KeyValue {
    * @param key The name of the key to delete
    * @returns The instance being called
    */
-  public delete(key: string) {
+  public delete(key: string): this {
     const k = this.getKeyIndex(key)
 
     if (k > -1) {
@@ -93,7 +93,7 @@ export class KeyValue {
   /**
    * Add new newline token
    */
-  public addNewline() {
+  public addNewline(): this {
     return this.pushNewlineToken()
   }
 
@@ -104,20 +104,25 @@ export class KeyValue {
    * The comment can be multi-line
    * @param comment
    */
-  public addComment(comment: string) {
+  public addComment(comment: string): this {
     if (this._tokens.length) {
       this.pushNewlineToken()
     }
 
-    comment = comment.split('\n').map((s) => `# ${s}`).join('\n')
+    comment = comment
+      .split('\n')
+      .map((s) => `# ${s}`)
+      .join('\n')
+
     this._tokens.push({ type: TokenType.Comment, value: comment })
+
     return this
   }
 
   /**
    * Remove all comment tokens
    */
-  public removeComments() {
+  public removeComments(): this {
     const tokens = this._tokens
     const newTokens: Token[] = []
     const rmLeadingWs = () => {
@@ -159,10 +164,8 @@ export class KeyValue {
    * @param collapseWhitespace If `true` all whitespaces, except newlines,
    * will be removed
    */
-  public toString(collapseWhitespace = false) {
-    const tokens = collapseWhitespace
-      ? this.collapseWhitespace()
-      : this._tokens
+  public toString(collapseWhitespace = false): string {
+    const tokens = collapseWhitespace ? this.collapseWhitespace() : this._tokens
 
     return tokens.map((t) => t.value).join('')
   }
@@ -171,7 +174,7 @@ export class KeyValue {
    * Check if the comment at `pos` is a trailing comment or not
    * @param pos
    */
-  protected isTrailingComment(pos: number) {
+  protected isTrailingComment(pos: number): boolean {
     const tokens = this._tokens
     const c = tokens[pos]
     if (c.type !== TokenType.Comment) {
@@ -186,11 +189,9 @@ export class KeyValue {
 
       if (t.type === TokenType.Whitespace) {
         continue
-      }
-      else if (t.type === TokenType.Value) {
+      } else if (t.type === TokenType.Value) {
         return true
-      }
-      else if (t.type === TokenType.Newline) {
+      } else if (t.type === TokenType.Newline) {
         return false
       }
     }
@@ -201,7 +202,7 @@ export class KeyValue {
   /**
    * Check if we need no add a newline before adding a new key/value pair
    */
-  protected addNewlineBeforeNewValue() {
+  protected addNewlineBeforeNewValue(): void {
     if (!this._tokens.length) {
       return
     }
@@ -215,7 +216,7 @@ export class KeyValue {
   /**
    * Push a newline token
    */
-  protected pushNewlineToken() {
+  protected pushNewlineToken(): this {
     this._tokens.push({ type: TokenType.Newline, value: '\n' })
     return this
   }
@@ -224,16 +225,15 @@ export class KeyValue {
    * Get the key token with name `key`
    * @param key
    */
-  protected getKey(key: string) {
-    return this._tokens.find(
-      (t) => t.type === TokenType.Key && t.value === key)
+  protected getKey(key: string): Maybe<Token> {
+    return this._tokens.find((t) => t.type === TokenType.Key && t.value === key)
   }
 
   /**
    * Returns the index of the key token with name `key`
    * @param key
    */
-  protected getKeyIndex(key: string) {
+  protected getKeyIndex(key: string): number {
     return this._tokens.findIndex((val) => {
       return val.type === TokenType.Key && val.value === key
     })
@@ -242,15 +242,15 @@ export class KeyValue {
   /**
    * Remove all unnecessary whitespace tokens
    */
-  protected collapseWhitespace() {
+  protected collapseWhitespace(): Token[] {
     const len = this._tokens.length - 1
 
     return this._tokens.filter((t, i) => {
-      if ((this._tokens[i - 1]
-        && this._tokens[i - 1].type === TokenType.Newline
-        && t.type === TokenType.Newline)
-        || (i === len
-          && t.type === TokenType.Newline)
+      if (
+        (this._tokens[i - 1] &&
+          this._tokens[i - 1].type === TokenType.Newline &&
+          t.type === TokenType.Newline) ||
+        (i === len && t.type === TokenType.Newline)
       ) {
         return false
       }
@@ -263,7 +263,7 @@ export class KeyValue {
    * Returns the value token for key `key`
    * @param key
    */
-  protected getValueForKey(key: string) {
+  protected getValueForKey(key: string): Maybe<Token> {
     const keyPos = this.getKeyIndex(key)
     const tokens = this._tokens
 

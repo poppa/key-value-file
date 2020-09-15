@@ -1,16 +1,15 @@
 import fs, { PathLike } from 'fs'
-import { promisify } from "util"
+import { promisify } from 'util'
 
 const stat = promisify(fs.stat)
 
 export const readFile = promisify(fs.readFile)
 export const writeFile = promisify(fs.writeFile)
-export const exists = async (path: PathLike) => {
+export const exists = async (path: PathLike): Promise<boolean> => {
   try {
     const s = await stat(path)
     return !!s
-  }
-  catch (e) {
+  } catch (e) {
     return false
   }
 }

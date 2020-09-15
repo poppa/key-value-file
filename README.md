@@ -1,6 +1,6 @@
 # key-value-file
 
-This is a simple __key/value file__ parser/writer. Its initial purpose is to
+This is a simple **key/value file** parser/writer. Its initial purpose is to
 handle parsing of `.env` files.
 
 The main purpose is to be able to alter `.env` files programmatically
@@ -23,8 +23,7 @@ import { parseFile } from 'key-value-file'
 async function myFunc() {
   const kv = await parseFile('my-environment.env')
 
-  kv
-    .rename('key1', 'keyOne')
+  kv.rename('key1', 'keyOne')
     .set('key2', 4)
     .delete('key3')
     .set('key4', 'new value')
@@ -73,36 +72,37 @@ test2=2
 
 # Quick doc
 
-  * __`async parseFile(path: PathLike): KeyValueFile`__
+- **`async parseFile(path: PathLike): KeyValueFile`**
 
-  * __`KeyValueFile`__
-    * __`path`__
-      Property that returns the file path of the key/value file.
+- **`KeyValueFile`**
 
-    * __`set(key: string, value: string | number): this`__
-      Set the value of `key` to `value`. If `key` doesn't exist it is created.
+  - **`path`**
+    Property that returns the file path of the key/value file.
 
-    * __`get(key: string): string | undefined`__
-      Returns the value of `key`, or `undefined` if the key doesn't exist.
+  - **`set(key: string, value: string | number): this`**
+    Set the value of `key` to `value`. If `key` doesn't exist it is created.
 
-    * __`delete(key: string): this`__
-      Delete the key `key` and its value.
+  - **`get(key: string): string | undefined`**
+    Returns the value of `key`, or `undefined` if the key doesn't exist.
 
-    * __`rename(key: string, newName: string): this`__
-      Rename the key `key` to `newName`.
+  - **`delete(key: string): this`**
+    Delete the key `key` and its value.
 
-    * __`async writeFile(normalizeWhitespace = false): this`__
-      Write the current data to the path of `KeyValueFile`. If
-      `normalizeWhitespace` is `true` all excessive whitespace will be removed.
+  - **`rename(key: string, newName: string): this`**
+    Rename the key `key` to `newName`.
 
-    * __`toString(normalizeWhitespace = false): string`__
-      Convert the data to a key/value string. If `normalizeWhitespace` is
-      `true` all excessive whitespace will be removed.
+  - **`async writeFile(normalizeWhitespace = false): this`**
+    Write the current data to the path of `KeyValueFile`. If
+    `normalizeWhitespace` is `true` all excessive whitespace will be removed.
+
+  - **`toString(normalizeWhitespace = false): string`**
+    Convert the data to a key/value string. If `normalizeWhitespace` is
+    `true` all excessive whitespace will be removed.
 
 # TODO
 
-  * ~~__Handle missing/empty values__~~ _(fixed)_
-    ~~Things will probably break right now if something like `key= ` occurs.~~
+- ~~**Handle missing/empty values**~~ _(fixed)_
+  ~~Things will probably break right now if something like `key= ` occurs.~~
 
-  * __Documentation__
-    Oh, how we like that.
+- **Documentation**
+  Oh, how we like that.

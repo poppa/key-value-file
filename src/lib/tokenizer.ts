@@ -9,11 +9,11 @@ export class Tokenizer extends StringWalker {
     super(data, true)
   }
 
-  public get tokens() {
+  public get tokens(): Token[] {
     return this._tokens
   }
 
-  public tokenize() {
+  public tokenize(): Token[] {
     while (!this.isEof()) {
       this.readKey()
     }
@@ -21,7 +21,7 @@ export class Tokenizer extends StringWalker {
     return this._tokens
   }
 
-  protected eatWhitespace() {
+  protected eatWhitespace(): void {
     if (!this.isEof()) {
       const start = this.cursor
       this.eatNewline()
@@ -33,29 +33,29 @@ export class Tokenizer extends StringWalker {
     }
   }
 
-  protected eatNewline() {
+  protected eatNewline(): void {
     while (!this.isEof() && this.isNewline()) {
       this.pushCurrentToken(TokenType.Newline)
       this.next()
     }
   }
 
-  protected eatSpacesAndTabs() {
+  protected eatSpacesAndTabs(): void {
     while (!this.isEof() && this.isSpaceOrTab()) {
       this.pushCurrentToken(TokenType.Whitespace)
       this.next()
     }
   }
 
-  protected pushToken(type: TokenType, value: string) {
+  protected pushToken(type: TokenType, value: string): void {
     this._tokens.push({ type, value })
   }
 
-  protected pushCurrentToken(type: TokenType) {
+  protected pushCurrentToken(type: TokenType): void {
     this._tokens.push({ type, value: this.currentChar() })
   }
 
-  protected readKey() {
+  protected readKey(): void {
     this.eatWhitespace()
     this.readComment()
 
@@ -63,12 +63,11 @@ export class Tokenizer extends StringWalker {
       return
     }
 
-    let endpos: number = NaN
+    let endpos = NaN
 
     if (this.isQuoteChar()) {
       endpos = this.findStringEnd()
-    }
-    else {
+    } else {
       endpos = this.findNextOf([' ', '\t', '='])
     }
 
@@ -91,24 +90,21 @@ export class Tokenizer extends StringWalker {
     this.readValue()
   }
 
-  protected readValue() {
+  protected readValue(): void {
     this.eatSpacesAndTabs()
 
     if (this.isEof() || this.isNewline()) {
       this.pushToken(TokenType.Value, '')
       this.next()
-    }
-    else if (this.isCommentStart()) {
+    } else if (this.isCommentStart()) {
       this.pushToken(TokenType.Value, '')
       this.readComment()
-    }
-    else {
+    } else {
       let endpos = this.len
 
       if (this.isQuoteChar()) {
         endpos = this.findStringEnd()
-      }
-      else {
+      } else {
         endpos = this.findNextOf(['#', '\n'])
       }
 
@@ -128,26 +124,27 @@ export class Tokenizer extends StringWalker {
     }
   }
 
-  protected isQuoteChar(n = 0) {
+  protected isQuoteChar(n = 0): boolean {
     return [34, 39].includes(n ? this.at(n) : this.current())
   }
 
-  protected isCommentStart(n = 0) {
+  protected isCommentStart(n = 0): boolean {
     return (n ? this.at(n) : this.current()) === 35
   }
 
-  protected isNewline(n = 0) {
+  protected isNewline(n = 0): boolean {
     return (n ? this.at(n) : this.current()) === 10
   }
 
-  protected isSpaceOrTab(n = 0) {
+  protected isSpaceOrTab(n = 0): boolean {
     return this.spaceAndTab.includes(n ? this.at(n) : this.current())
   }
 
-  protected findStringEnd() {
+  protected findStringEnd(): number {
     if (!this.isQuoteChar()) {
-      throw new Error(`Expected current charachter to be ' or ", got ${
-        this.currentChar()}`)
+      throw new Error(
+        `Expected current charachter to be ' or ", got ${this.currentChar()}`
+      )
     }
 
     const endpos = this.findNext(this.current())
@@ -159,7 +156,7 @@ export class Tokenizer extends StringWalker {
     return endpos + 1
   }
 
-  protected handleTrailingComment(endpos: number) {
+  protected handleTrailingComment(endpos: number): void {
     const prev = this.cursor
     this.moveTo(endpos)
 
@@ -180,7 +177,7 @@ export class Tokenizer extends StringWalker {
     }
   }
 
-  protected readComment() {
+  protected readComment(): void {
     if (this.isCommentStart()) {
       let endpos = this.findNext('\n')
 
