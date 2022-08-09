@@ -113,4 +113,19 @@ describe('Test tokenizer', () => {
 
     expect(keyval.toString()).toEqual(expected)
   })
+
+  test('Expect empty values to be handled', () => {
+    // prettier-ignore
+    const data =
+      'key1 = value\n' +
+      'key2 = \n' +
+      'key3 =\n' +
+      'key4 = four\n'
+
+    const f = parseString(data)
+    expect(f.get('key2')).toEqual('')
+    expect(f.get('key3')).toEqual('')
+    expect(f.get('key4')).toEqual('four')
+    expect(f.toString()).toEqual(data)
+  })
 })

@@ -95,6 +95,9 @@ export class Tokenizer extends StringWalker {
 
     if (this.isEof() || this.isNewline()) {
       this.pushToken(TokenType.Value, '')
+      if (this.isNewline()) {
+        this.pushToken(TokenType.Newline, '\n')
+      }
       this.next()
     } else if (this.isCommentStart()) {
       this.pushToken(TokenType.Value, '')
